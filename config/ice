@@ -1,0 +1,5 @@
+
+git remote add austin https://github.com/insertcreativityhere/ice.git
+
+bash ../../add-build.sh ice:master
+bash ../../add-build.sh ice:3.7

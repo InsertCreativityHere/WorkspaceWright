@@ -1,0 +1,5 @@
+
+git config user.name "Austin Henriksen"
+git config user.email "austin@zeroc.com"
+
+git config help.autocorrect 8
