@@ -1,7 +1,7 @@
 #!/bin/bash
 cd "$(dirname "$0")"
 
-splitRegex="([a-zA-Z0-9_\\-\\.]+):([a-zA-Z0-9_i\\-\\.]+)";
+splitRegex="([a-zA-Z0-9_\.-]+):([a-zA-Z0-9_\.-]+)";
 
 for branch in "$@"; do
     if [[ $branch =~ $splitRegex ]]; then

@@ -8,7 +8,7 @@ printf "Cloning repositories...\n\n";
 while read line; do
     if ! [ -z "$line" ]; then
         if [[ $line =~ $nameRegex ]]; then
-            name=${BASE_REMATCH[1]};
+            name=${BASH_REMATCH[1]};
         else
             printf "error: Malformed repository descriptor: '$line'. Skipping...\n\n";
             continue;
@@ -21,7 +21,7 @@ while read line; do
 
         remoteRegex="/([^/ ]+)/$name";
         if [[ $line =~ $remoteRegex ]]; then
-            remoteRepo=${BASE_REMATCH[1]};
+            remoteRepo=${BASH_REMATCH[1]};
         else
             printf "error: Malformed repository descriptor: '$line'. Skipping.\n\n";
             continue;
@@ -57,7 +57,7 @@ if [ -d "config" ]; then
     while read line; do
         if ! [ -z "$line" ]; then
             if [[ $line =~ $nameRegex ]]; then
-                name=${BASE_REMATCH[1]};
+                name=${BASH_REMATCH[1]};
             else
                 printf "error: Malformed repository descriptor: '$line'. Skipping...\n\n";
                 continue;
@@ -68,7 +68,6 @@ if [ -d "config" ]; then
                 continue;
             fi
 
-            echo "Configuring '$name'...\n";
             cwd=$(pwd);
             cd "./Masters/$name"
 
@@ -80,8 +79,7 @@ if [ -d "config" ]; then
                 source "../../config/$name";
             fi
 
-            printf "done.\n\n";
-            cd "cwd";
+            cd "$cwd";
         fi
     done < "./repo-list"
 

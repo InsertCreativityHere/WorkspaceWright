@@ -1,10 +1,10 @@
 #!/bin/bash
 cd "$(dirname "$0")"
 
-splitRegex="([a-zA-Z0-9_\\-\\.]+):([a-zA-Z0-9_i\\-\\.]+)~([a-zA-Z0-9_i\\-\\.]+)";
+splitRegex="([a-zA-Z0-9_\.-]+):([a-zA-Z0-9_\.-]+)~([a-zA-Z0-9_\.-]+)";
 
 for project in "$@"; do
-    if [[ $branch =~ $splitRegex ]]; then
+    if [[ $project =~ $splitRegex ]]; then
         repository=${BASH_REMATCH[1]};
         branchName=${BASH_REMATCH[2]};
         projectName=${BASH_REMATCH[3]};
@@ -18,7 +18,7 @@ for project in "$@"; do
         continue;
     fi
 
-    printf "Creating project-worktree based on '$repository/$branch'...\n";
+    printf "Creating project-worktree based on '$repository/$branchName'...\n";
     cwd=$(pwd);
     cd "./Masters/$repository";
 

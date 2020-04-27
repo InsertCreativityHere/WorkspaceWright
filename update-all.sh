@@ -7,7 +7,7 @@ printf "Updating Masters...\n\n";
 while read line; do
     if ! [ -z "$line" ]; then
         if [[ $line =~ $nameRegex ]]; then
-            name=${BASE_REMATCH[1]};
+            name=${BASH_REMATCH[1]};
         else
             printf "error: Malformed repository descriptor: '$line'. Skipping...\n\n";
             continue;
@@ -20,7 +20,7 @@ while read line; do
 
         remoteRegex="/([^/ ]+)/$name";
         if [[ $line =~ $remoteRegex ]]; then
-            remoteRepo=${BASE_REMATCH[1]};
+            remoteRepo=${BASH_REMATCH[1]};
         else
             printf "error: Malformed repository descriptor: '$line'. Skipping...\n\n";
             continue;
@@ -33,7 +33,7 @@ while read line; do
 
         for remoteBranch in `git branch -r | grep -v HEAD`; do
             remoteBranch=$(echo "$remoteBranch" | tr -d '[:space:]');
-            branch="${remoteBranch#remoteRepo/}";
+            branch="${remoteBranch#$remoteRepo/}";
 
             if ! [[ $(git branch --list "$branch") ]]; then
                 printf "Checking out local copy of new remote branch '$branch'.\n";
@@ -66,15 +66,15 @@ printf "Updating Builds...\n\n";
 shopt -s nullglob
 for build in ./Builds/*; do
     cwd=$(pwd);
-    cd "./Builds/$build";
+    cd "$build";
     currentBranch=$(git for-each-ref --format='%(upstream:short)' "$(git symbolic-ref -q HEAD)");
-    if [ -z "$currentBranch" ]
+    if [ -z "$currentBranch" ]; then
         printf "Folder '$build' isn't linked to any build branch. Skipping...\n\n";
     fi
 
     printf "Updating '$currentBranch' in '$build'...\n";
     git merge --ff-only "$currentBranch";
-    cd "#cwd";
+    cd "$cwd";
     printf "done.\n\n";
 done
 shopt -u nullglob
