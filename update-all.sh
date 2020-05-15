@@ -29,6 +29,7 @@ while read line; do
         printf "Updating branches for '$name'...\n";
         cwd=$(pwd);
         cd "./Masters/$name";
+        git fetch "$remoteRepo"
         currentBranch=$(git rev-parse --abbrev-ref HEAD);
 
         for remoteBranch in `git branch -r | grep -v HEAD`; do
@@ -52,7 +53,7 @@ while read line; do
                 elif [ "$branch" == "$currentBranch" ]; then
                     git merge -q --ff-only $rrb;
                 else
-                    git fetch "$remoteRepo" "$brancename":"$branchname";
+                    git fetch "$remoteRepo" "$branch":"$branch";
                 fi
             fi
         done
